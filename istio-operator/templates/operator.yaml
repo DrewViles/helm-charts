@@ -1,0 +1,18 @@
+{{- if .Values.controlPlane.enabled }}
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  namespace: {{ .Values.operator.istioNamespace }}
+  name: istio-operator-istiocontrolplane
+  labels:
+    {{- include "istio-operator.labels" . | nindent 4 }}
+
+  annotations:
+    {{- include "istio-operator.annotations" . | nindent 4 }}
+spec:
+  profile: "default"
+  components:
+    {{- toYaml .Values.controlPlane.components | nindent 4 }}
+  addonComponents:
+    {{- toYaml .Values.controlPlane.addonComponents | nindent 4 }}
+{{- end}}

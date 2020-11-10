@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{.Values.operator.operatorNamespace.name}}
+  name: istio-operator
+  labels:
+  {{- include "istio-operator.labels" . | nindent 4 }}
+  annotations:
+  {{- include "istio-operator.annotations" . | nindent 4 }}
+spec:
+  {{- if .Values.operator.replicas }}
+  replicas: {{ .Values.operator.replicas }}
+  {{- end }}
+  selector:
+    matchLabels:
+      name: istio-operator
+  template:
+    metadata:
+      labels:
+        name: istio-operator
+    spec:
+      {{- with .Values.operator.imagePullSecrets }}
+      imagePullSecrets:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: istio-operator
+      containers:
+        - name: istio-operator
+          image: {{.Values.image.repo}}/operator:{{.Values.image.tag}}
+          command:
+            - operator
+            - server
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsGroup: 1337
+            runAsUser: 1337
+            runAsNonRoot: true
+          imagePullPolicy: {{.Values.operator.imagePullPolicy}}
+          resources:
+          {{- toYaml .Values.operator.resources | nindent 12 }}
+          env:
+            - name: WATCH_NAMESPACE
+              value: {{.Values.operator.istioNamespace}}
+            - name: LEADER_ELECTION_NAMESPACE
+              value: {{.Values.operator.operatorNamespace.name}}
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: {{.Values.operator.name}}
+            - name: WAIT_FOR_RESOURCES_TIMEOUT
+              value: "300s"
+            - name: REVISION
+              value: ""
+      {{- with .Values.operator.nodeSelector }}
+      nodeSelector:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.operator.affinity }}
+      affinity:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.operator.tolerations }}
+      tolerations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+---

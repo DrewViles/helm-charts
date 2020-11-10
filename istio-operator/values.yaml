@@ -1,0 +1,43 @@
+image:
+  repo: docker.io/istio
+  tag: 1.7.4
+#  tag: 1.5.4
+operator:
+  name: istio-operator
+  imagePullPolicy: IfNotPresent
+  istioNamespace: istio-system
+  operatorNamespace:
+    name: istio-operator
+  replicas: 1
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 50m
+      memory: 128Mi
+  imagePullSecrets: { }
+  podSecurityContext: { }
+  nodeSelector: { }
+  affinity: { }
+  tolerations: { }
+controlPlane:
+  enabled: true
+  components:
+    egressGateways:
+      - name: istio-egressgateway
+        enabled: true
+        namespace: istio-system
+#       k8s:
+#          serviceAnnotations:
+#            external-dns.alpha.kubernetes.io/hostname: some.domain.com
+    ingressGateways:
+      - name: istio-ingressgateway
+        enabled: true
+        namespace: istio-system
+#      k8s:
+#        serviceAnnotations:
+#          external-dns.alpha.kubernetes.io/hostname: some.domain.com
+  addonComponents:
+    grafana:
+      enabled: true
