@@ -2,7 +2,7 @@
 apiVersion: install.istio.io/v1alpha1
 kind: IstioOperator
 metadata:
-  namespace: {{ .Values.operator.istioNamespace }}
+  namespace: {{ .Values.operator.operatorNamespace.name }}
   name: istio-operator-istiocontrolplane
   labels:
     {{- include "istio-operator.labels" . | nindent 4 }}

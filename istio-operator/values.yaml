@@ -5,9 +5,11 @@ image:
 operator:
   name: istio-operator
   imagePullPolicy: IfNotPresent
-  istioNamespace: istio-system
   operatorNamespace:
     name: istio-operator
+  istioNamespace:
+    create: true
+    name: istio-system
   replicas: 1
   resources:
     limits:

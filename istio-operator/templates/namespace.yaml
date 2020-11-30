@@ -1,7 +1,8 @@
+{{- if .Values.operator.istioNamespace.create -}}
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: {{ .Values.operator.istioNamespace }}
+  name: {{ .Values.operator.istioNamespace.name }}
   labels:
     istio-operator-managed: Reconcile
     istio-injection: disabled
@@ -9,3 +10,4 @@ metadata:
   annotations:
     {{- include "istio-operator.annotations" . | nindent 4 }}
 ---
+{{- end}}
