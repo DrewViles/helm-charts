@@ -45,7 +45,7 @@ spec:
           {{- toYaml .Values.operator.resources | nindent 12 }}
           env:
             - name: WATCH_NAMESPACE
-              value: {{.Values.operator.istioNamespace}}
+              value: {{.Values.operator.istioNamespace.name}}
             - name: LEADER_ELECTION_NAMESPACE
               value: {{.Values.operator.operatorNamespace.name}}
             - name: POD_NAME
