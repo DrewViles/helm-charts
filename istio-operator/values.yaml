@@ -8,8 +8,8 @@ operator:
   operatorNamespace:
     name: istio-operator
   istioNamespace:
-    create: true
     name: istio-system
+    create: true
   replicas: 1
   resources:
     limits:
