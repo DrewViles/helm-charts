@@ -15,5 +15,5 @@ entries:
     - https://drewviles.github.io/helm-charts/istio-operator
     urls:
     - https://github.com/DrewViles/helm-charts/releases/download/1.7.4/istio-operator-1.7.4.tgz
-    version: 1.7.4
+    version: 1.7.4.1
 generated: "2020-10-12T10:36:16.770010791+01:00"
