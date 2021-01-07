@@ -7,7 +7,7 @@ A collection of helm charts for things that currently don't exist.
 
 Change what you need to within the chart you're working on.
 
-hen run:
+Then run:
 `helm package istio-operator/ -d packages/`
 
 The new tar.gz will appear in the `packages/` directory.
