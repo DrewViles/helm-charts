@@ -32,10 +32,10 @@ Once done it should look something like:
         - https://github.com/DrewViles/helm-charts/releases/download/1.7.4.1/istio-operator-1.7.4.1.tgz
 ```
 
-# Pull Request
+## Pull Request
 Once completed, create a PR and await approval.
 
-#Mint a release
+## Mint a release
 
 Now you can mint a new release.
 
