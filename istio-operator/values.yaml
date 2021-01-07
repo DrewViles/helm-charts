@@ -7,6 +7,8 @@ operator:
   imagePullPolicy: IfNotPresent
   operatorNamespace:
     name: istio-operator
+  prometheusNamespace:
+    name: monitoring
   istioNamespace:
     name: istio-system
     create: true
@@ -42,4 +44,4 @@ controlPlane:
 #          external-dns.alpha.kubernetes.io/hostname: some.domain.com
   addonComponents:
     grafana:
-      enabled: true
+      enabled: false
