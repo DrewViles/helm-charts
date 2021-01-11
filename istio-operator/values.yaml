@@ -42,6 +42,13 @@ controlPlane:
 #      k8s:
 #        serviceAnnotations:
 #          external-dns.alpha.kubernetes.io/hostname: some.domain.com
+
+serviceMonitors:
+  enabled: true  # Can be set to false to disable servicemonitor deployment
+  labels:
+    lexx: john
+    bob: frank
+
   addonComponents:
     grafana:
       enabled: false

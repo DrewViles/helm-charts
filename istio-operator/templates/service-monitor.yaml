@@ -1,4 +1,5 @@
 ---
+{{- if .Values.serviceMonitors.enabled -}}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
@@ -6,6 +7,10 @@ metadata:
   namespace: {{.Values.operator.prometheusNamespace.name}}
   labels:
     release: prometheus
+    monitoring: istio-controlplane
+  {{- if .Values.serviceMonitors -}}
+    {{.Values.serviceMonitors.labels }}
+  {{- end }}
   {{- include "istio-operator.labels" . | nindent 4 }}
 spec:
   jobLabel: istio
@@ -29,6 +34,9 @@ metadata:
   labels:
     monitoring: istio-dataplane
     release: prometheus
+  {{- if .Values.serviceMonitors -}}
+    {{.Values.serviceMonitors.labels }}
+  {{- end }}
   {{- include "istio-operator.labels" . | nindent 4 }}
 spec:
   selector:
@@ -53,3 +61,4 @@ spec:
     - sourceLabels: [__meta_kubernetes_pod_name]
       action: replace
       targetLabel: pod_name
+{{- end }}
