@@ -45,9 +45,7 @@ controlPlane:
 
 serviceMonitors:
   enabled: true  # Can be set to false to disable servicemonitor deployment
-  labels:
-    lexx: john
-    bob: frank
+  labels: { }
 
   addonComponents:
     grafana:
