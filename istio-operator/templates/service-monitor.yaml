@@ -9,7 +9,9 @@ metadata:
     release: prometheus
     monitoring: istio-controlplane
   {{- if .Values.serviceMonitors -}}
-  {{- toYaml .Values.serviceMonitors.labels | nindent 4 }}
+    {{- with .Values.serviceMonitors.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
   {{- end }}
   {{- include "istio-operator.labels" . | nindent 4 }}
 spec:
@@ -35,7 +37,9 @@ metadata:
     monitoring: istio-dataplane
     release: prometheus
   {{- if .Values.serviceMonitors -}}
-  {{- toYaml .Values.serviceMonitors.labels | nindent 4 }}
+    {{- with .Values.serviceMonitors.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
   {{- end }}
   {{- include "istio-operator.labels" . | nindent 4 }}
 spec:
