@@ -7,6 +7,8 @@ operator:
   imagePullPolicy: IfNotPresent
   operatorNamespace:
     name: istio-operator
+  prometheusNamespace:
+    name: monitoring
   istioNamespace:
     name: istio-system
     create: true
@@ -40,6 +42,11 @@ controlPlane:
 #      k8s:
 #        serviceAnnotations:
 #          external-dns.alpha.kubernetes.io/hostname: some.domain.com
+
+serviceMonitors:
+  enabled: true  # Can be set to false to disable servicemonitor deployment
+  labels: { }
+
   addonComponents:
     grafana:
-      enabled: true
+      enabled: false

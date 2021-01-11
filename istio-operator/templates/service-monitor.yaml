@@ -1,0 +1,64 @@
+---
+{{- if .Values.serviceMonitors.enabled -}}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: prometheus-oper-istio-controlplane
+  namespace: {{.Values.operator.prometheusNamespace.name}}
+  labels:
+    release: prometheus
+    monitoring: istio-controlplane
+  {{- if .Values.serviceMonitors -}}
+  {{- toYaml .Values.serviceMonitors.labels | nindent 4 }}
+  {{- end }}
+  {{- include "istio-operator.labels" . | nindent 4 }}
+spec:
+  jobLabel: istio
+  selector:
+    matchExpressions:
+      - {key: app, istio, operator: In, values: [mixer,pilot,galley,citadel,sidecar-injector,istiod]}
+  namespaceSelector:
+    any: true
+  endpoints:
+  - port: http-monitoring
+    interval: 15s
+  - port: http-policy-monitoring
+    interval: 15s
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: prometheus-oper-istio-dataplane
+  namespace: {{.Values.operator.prometheusNamespace.name}}
+  labels:
+    monitoring: istio-dataplane
+    release: prometheus
+  {{- if .Values.serviceMonitors -}}
+    {{.Values.serviceMonitors.labels }}
+  {{- end }}
+  {{- include "istio-operator.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchExpressions:
+      - {key: istio-prometheus-ignore, operator: DoesNotExist}
+  namespaceSelector:
+    any: true
+  jobLabel: envoy-stats
+  endpoints:
+  - path: /stats/prometheus
+    targetPort: http-envoy-prom
+    interval: 15s
+    relabelings:
+    - sourceLabels: [__meta_kubernetes_pod_container_port_name]
+      action: keep
+      regex: '.*-envoy-prom'
+    - action: labelmap
+      regex: "__meta_kubernetes_pod_label_(.+)"
+    - sourceLabels: [__meta_kubernetes_namespace]
+      action: replace
+      targetLabel: namespace
+    - sourceLabels: [__meta_kubernetes_pod_name]
+      action: replace
+      targetLabel: pod_name
+{{- end }}
