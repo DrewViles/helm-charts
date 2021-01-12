@@ -15,13 +15,13 @@ The new tar.gz will appear in the `packages/` directory.
 Now update the index file for the new package:
 `helm repo index ./ --url https://github.com/DrewViles/helm-charts/releases/download/`
 
-### Caveat
+### Caveat - To be fixed asap
 Because this repo is hosted on GithubPages, we need to make one small change to the output file `-urls`:
 
-Do a find and replace of the following replacing the variable `SUB_VERSION` with your new version increase.
+Do a find and replace of the following replacing the variable `SEM_VERSION` with your new version increase.
 `https://github.com/DrewViles/helm-charts/releases/download/packages/`
 to
-`https://github.com/DrewViles/helm-charts/releases/download/1.7.4.SUB_VERSION/`
+`https://github.com/DrewViles/helm-charts/releases/download/1.7.4.SEM_VERSION/`
 
 Essentially replacing the "packages" with the version of the chart.
 

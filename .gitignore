@@ -1,1 +1,4 @@
 .idea
+!packages/
+packages/*.tar.gz
+packages/*.tgz
