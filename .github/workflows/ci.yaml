@@ -1,7 +1,10 @@
 name: Lint and Test Charts
 
 on:
-  pull_request:
+#  pull_request:
+  push:
+    branches:
+      - master
     paths:
       - 'charts/**'
 
@@ -11,6 +14,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+
       - name: Run chart-testing (lint)
         uses: helm/chart-testing-action@master
         with:
@@ -22,6 +26,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+
       - name: Run helm-docs
         run: .github/helm-docs.sh
   kubeval-chart:
@@ -39,6 +44,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+
       - name: Run kubeval
         env:
           KUBERNETES_VERSION: ${{ matrix.k8s }}
@@ -60,10 +66,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+
       - name: Create kind ${{ matrix.k8s }} cluster
         uses: helm/kind-action@master
         with:
           node_image: kindest/node:${{ matrix.k8s }}
+
       - name: Run chart-testing (install)
         uses: helm/chart-testing-action@master
         with:
