@@ -1,3 +1,5 @@
+---
+
 image:
   repo: docker.io/istio
   tag: 1.7.4
@@ -20,14 +22,14 @@ operator:
     requests:
       cpu: 50m
       memory: 128Mi
-  imagePullSecrets: { }
-  podSecurityContext: { }
-  nodeSelector: { }
-  affinity: { }
-  tolerations: { }
+  imagePullSecrets: {}
+  podSecurityContext: {}
+  nodeSelector: {}
+  affinity: {}
+  tolerations: {}
 serviceMonitors:
   enabled: true  # Can be set to false to disable servicemonitor deployment
-  labels: { }
+  labels: {}
 controlPlane:
   enabled: true
   components:
@@ -42,10 +44,9 @@ controlPlane:
       - name: istio-ingressgateway
         enabled: true
         namespace: istio-system
-  #      k8s:
-  #        serviceAnnotations:
-  #          external-dns.alpha.kubernetes.io/hostname: some.domain.com
+    #      k8s:
+    #        serviceAnnotations:
+    #          external-dns.alpha.kubernetes.io/hostname: some.domain.com
     addonComponents:
       grafana:
         enabled: false
-
