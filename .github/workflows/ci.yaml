@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - lint-chart
-      - lint-docs
+#      - lint-docs
     strategy:
       matrix:
         k8s:
