@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'charts/**'
+  workflow_dispatch:
 
 jobs:
   release:
