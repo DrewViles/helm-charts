@@ -28,8 +28,8 @@ Essentially replacing the "packages" with the version of the chart.
 Once done it should look something like:
 
 ```
-      urls:
-        - https://github.com/DrewViles/helm-charts/releases/download/1.7.4.1/istio-operator-1.7.4.1.tgz
+urls:
+    - https://github.com/DrewViles/helm-charts/releases/download/1.7.4.1/istio-operator-1.7.4.1.tgz
 ```
 
 ## Pull Request
@@ -39,6 +39,6 @@ Once completed, create a PR and await approval.
 
 Now you can mint a new release.
 
-Set the release and tag to the **ChartVersion** (EG 1.7.4.1) and then upload the tar.gz package for your release.
+Set the release and tag to the **ChartVersion** (EG 1.7.4-release2) and then upload the tar.gz package for your release.
 
 You're done - go eat some cake.
