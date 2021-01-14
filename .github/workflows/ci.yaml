@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - 'releases/**'
-#    branches:
-#      - master
     paths:
       - 'charts/**'
   pull_request:
