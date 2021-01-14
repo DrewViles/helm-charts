@@ -1,10 +1,8 @@
-# renovate
+# Istio-Operator
 
-![Version: 24.16.3](https://img.shields.io/badge/Version-24.16.3-informational?style=flat-square) ![AppVersion: 24.16.3](https://img.shields.io/badge/AppVersion-24.16.3-informational?style=flat-square)
+![Version: 1.7.4](https://istio.io/v1.7/docs/setup/install/operator/)
 
-Universal dependency update tool that fits into your workflows.
-
-**Homepage:** <https://github.com/renovatebot/renovate>
+**Homepage:** <https://istio.io/>
 
 ## Installation
 
