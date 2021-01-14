@@ -1,6 +1,6 @@
 # istio-operator
 
-![Version: 1.7.4-release2](https://img.shields.io/badge/Version-1.7.4--release2-informational?style=flat-square) ![AppVersion: 1.7.4](https://img.shields.io/badge/AppVersion-1.7.4-informational?style=flat-square)
+![Version: 1.7.4](https://img.shields.io/badge/Version-1.7.4--release2-informational?style=flat-square) ![AppVersion: 1.7.4](https://img.shields.io/badge/AppVersion-1.7.4-informational?style=flat-square)
 
 Helm chart for deploying Istio operator
 
@@ -9,7 +9,7 @@ Helm chart for deploying Istio operator
 ### Add Helm repository
 
 ```shell
-helm repo add drew-viles https://charts.deetothevee.co.uk/helm-charts
+helm repo add drew-viles https://drewviles.github.io/helm-charts
 helm repo update
 ```
 
