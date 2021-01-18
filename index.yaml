@@ -35,4 +35,23 @@ entries:
     urls:
     - https://github.com/DrewViles/helm-charts/releases/download/istio-operator-1.7.4-beta1/istio-operator-1.7.4-beta1.tgz
     version: 1.7.4-beta1
+  - apiVersion: v1
+    appVersion: 1.7.4
+    created: "2021-01-18T15:30:15.61399732Z"
+    description: Helm chart for deploying Istio operator
+    digest: 28bc126ef186b09123b4f722aab209241eb6470093eafc49e109679a5360c84d
+    icon: https://istio.io/favicons/android-192x192.png
+    keywords:
+    - istio
+    - operator
+    maintainers:
+    - email: drew@deetothevee.co.uk
+      name: Drew
+    - name: Owen
+    name: istio-operator
+    sources:
+    - https://drewviles.github.io/helm-charts/istio-operator
+    urls:
+    - https://github.com/DrewViles/helm-charts/releases/download/istio-operator-1.7.4-beta1/istio-operator-1.7.4-beta1.tgz
+    version: 1.7.4-beta1
 generated: "2021-01-14T16:42:35.879864852Z"
