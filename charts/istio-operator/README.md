@@ -1,6 +1,6 @@
 # istio-operator
 
-![Version: 1.7.4](https://img.shields.io/badge/Version-1.7.4-informational?style=flat-square) ![AppVersion: 1.7.4](https://img.shields.io/badge/AppVersion-1.7.4-informational?style=flat-square)
+![Version: 1.7.4-beta1](https://img.shields.io/badge/Version-1.7.4--beta1-informational?style=flat-square) ![AppVersion: 1.7.4](https://img.shields.io/badge/AppVersion-1.7.4-informational?style=flat-square)
 
 Helm chart for deploying Istio operator
 
@@ -21,6 +21,14 @@ Using config from a file:
 helm upgrade --install istio . --values ./values.yaml
 ```
 
+## Updating the Chart
+Make sure you've run and resolved any issues using the following as failures of these will cause the pipeline/actions to fail.
+```
+yamllint charts/istio-operator/values.yaml  --config-file .github/ct.yaml
+
+helm-docs .
+```
+
 ## Configuration
 
 The following table lists the configurable parameters of the chart and the default values.
@@ -29,7 +37,7 @@ The following table lists the configurable parameters of the chart and the defau
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| controlPlane.components.addonComponents.grafana.enabled | bool | `false` |  |
+| controlPlane.addonComponents.grafana.enabled | bool | `false` |  |
 | controlPlane.components.egressGateways[0].enabled | bool | `true` |  |
 | controlPlane.components.egressGateways[0].name | string | `"istio-egressgateway"` |  |
 | controlPlane.components.egressGateways[0].namespace | string | `"istio-system"` |  |

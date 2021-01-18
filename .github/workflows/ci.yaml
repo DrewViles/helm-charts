@@ -30,8 +30,6 @@ jobs:
 
       - name: Install chart-testing
         uses: helm/chart-testing-action@v2.0.1
-        with:
-          version: v3.3.0
 
       - name: Run lint
         run: ct lint --config .github/ct.yaml
@@ -42,6 +40,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2.3.4
+
       - name: Run helm-docs
         run: .github/helm-docs.sh
 
@@ -54,9 +53,6 @@ jobs:
       matrix:
         k8s:
           # from https://github.com/instrumenta/kubernetes-json-schema
-          - v1.14.10
-          - v1.15.7
-          - v1.16.4
           - v1.17.4
           - v1.18.1
     steps:
@@ -81,9 +77,6 @@ jobs:
       matrix:
         k8s:
           # from https://hub.docker.com/r/kindest/node/tags
-          - v1.14.10
-          - v1.15.12
-          - v1.16.15
           - v1.17.11
           - v1.18.8
           - v1.19.3
@@ -102,6 +95,8 @@ jobs:
         uses: helm/chart-testing-action@v2.0.1
         with:
           version: v3.3.0
+        continue-on-error: true
 
       - name: Run chart install
         run: ct install --config .github/ct.yaml
+        continue-on-error: true
