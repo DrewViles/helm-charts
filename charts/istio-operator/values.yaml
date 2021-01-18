@@ -32,6 +32,9 @@ serviceMonitors:
   labels: {}
 controlPlane:
   enabled: true
+  addonComponents:
+    grafana:
+      enabled: false
   components:
     egressGateways:
       - name: istio-egressgateway
@@ -47,6 +50,3 @@ controlPlane:
     #      k8s:
     #        serviceAnnotations:
     #          external-dns.alpha.kubernetes.io/hostname: some.domain.com
-    addonComponents:
-      grafana:
-        enabled: false
