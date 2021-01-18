@@ -29,7 +29,7 @@ The following table lists the configurable parameters of the chart and the defau
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| controlPlane.components.addonComponents.grafana.enabled | bool | `false` |  |
+| controlPlane.addonComponents.grafana.enabled | bool | `false` |  |
 | controlPlane.components.egressGateways[0].enabled | bool | `true` |  |
 | controlPlane.components.egressGateways[0].name | string | `"istio-egressgateway"` |  |
 | controlPlane.components.egressGateways[0].namespace | string | `"istio-system"` |  |
