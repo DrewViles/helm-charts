@@ -1,8 +1,11 @@
 ---
 # Default values for istio-operator.
 
+
 image:
+  # -- The repo to be used
   repo: docker.io/istio
+  # -- The tag to be used
   tag: 1.7.4
 #  tag: 1.5.4
 operator:
@@ -61,9 +64,9 @@ controlPlane:
 #           serviceAnnotations:
 #             external-dns.alpha.kubernetes.io/hostname: some.domain.com
 serviceMonitors:
-  enabled: true  # Can be set to false to disable servicemonitor deployment
+  # -- Can be set to false to disable servicemonitor deployment
+  enabled: true
   labels: {}
 
-# Enable or disable Grafana Dashboard Loads
 dashboards:
   enabled: true
