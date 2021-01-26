@@ -1,25 +1,5 @@
 ---
 
-controlPlane:
-  enabled: true
-  addonComponents:
-    grafana:
-      enabled: false
-  components:
-    egressGateways:
-      - name: istio-egressgateway
-        enabled: true
-        namespace: istio-system
-    #       k8s:
-    #          serviceAnnotations:
-    #            external-dns.alpha.kubernetes.io/hostname: some.domain.com
-    ingressGateways:
-      - name: istio-ingressgateway
-        enabled: true
-        namespace: istio-system
-    #      k8s:
-    #        serviceAnnotations:
-    #          external-dns.alpha.kubernetes.io/hostname: some.domain.com
 
 image:
   repo: docker.io/istio
@@ -48,6 +28,38 @@ operator:
   nodeSelector: {}
   affinity: {}
   tolerations: {}
+controlPlane:
+  enabled: true
+  addonComponents:
+    grafana:
+      enabled: false
+  meshConfig:
+    accessLogFile: /dev/stdout
+    enableAutoMtls: true
+    outboundTrafficPolicy:
+#      mode: REGISTRY_ONLY # TODO: You can enable this once infra is in place to manage it.
+      mode: ALLOW_ANY
+    rootNamespace: istio-system
+    enablePrometheusMerge: true
+    enableTracing: true
+    defaultConfig:
+      zipkin:
+        address: PATH_TO_JAEGER
+  components:
+    egressGateways:
+      - name: istio-egressgateway
+        enabled: true
+        namespace: istio-system
+    #         k8s:
+    #           serviceAnnotations:
+    #             external-dns.alpha.kubernetes.io/hostname: some.domain.com
+    ingressGateways:
+      - name: istio-ingressgateway
+        enabled: true
+        namespace: istio-system
+#         k8s:
+#           serviceAnnotations:
+#             external-dns.alpha.kubernetes.io/hostname: some.domain.com
 serviceMonitors:
   enabled: true  # Can be set to false to disable servicemonitor deployment
   labels: {}

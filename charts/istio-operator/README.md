@@ -45,6 +45,13 @@ The following table lists the configurable parameters of the chart and the defau
 | controlPlane.components.ingressGateways[0].name | string | `"istio-ingressgateway"` |  |
 | controlPlane.components.ingressGateways[0].namespace | string | `"istio-system"` |  |
 | controlPlane.enabled | bool | `true` |  |
+| controlPlane.meshConfig.accessLogFile | string | `"/dev/stdout"` |  |
+| controlPlane.meshConfig.defaultConfig.zipkin.address | string | `"PATH_TO_JAEGER"` |  |
+| controlPlane.meshConfig.enableAutoMtls | bool | `true` |  |
+| controlPlane.meshConfig.enablePrometheusMerge | bool | `true` |  |
+| controlPlane.meshConfig.enableTracing | bool | `true` |  |
+| controlPlane.meshConfig.outboundTrafficPolicy.mode | string | `"ALLOW_ANY"` |  |
+| controlPlane.meshConfig.rootNamespace | string | `"istio-system"` |  |
 | image.repo | string | `"docker.io/istio"` |  |
 | image.tag | string | `"1.7.4"` |  |
 | operator.affinity | object | `{}` |  |
