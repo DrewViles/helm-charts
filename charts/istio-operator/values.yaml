@@ -1,5 +1,5 @@
 ---
-
+# Default values for istio-operator. As per:
 
 image:
   repo: docker.io/istio
@@ -63,3 +63,7 @@ controlPlane:
 serviceMonitors:
   enabled: true  # Can be set to false to disable servicemonitor deployment
   labels: {}
+
+# Enable or disable Grafana Dashboard Loads
+dashboards:
+  enabled: true
