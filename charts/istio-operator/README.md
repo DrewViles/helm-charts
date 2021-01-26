@@ -52,8 +52,9 @@ The following table lists the configurable parameters of the chart and the defau
 | controlPlane.meshConfig.enableTracing | bool | `true` |  |
 | controlPlane.meshConfig.outboundTrafficPolicy.mode | string | `"ALLOW_ANY"` |  |
 | controlPlane.meshConfig.rootNamespace | string | `"istio-system"` |  |
-| image.repo | string | `"docker.io/istio"` |  |
-| image.tag | string | `"1.7.4"` |  |
+| dashboards.enabled | bool | `true` |  |
+| image.repo | string | `"docker.io/istio"` | The repo to be used |
+| image.tag | string | `"1.7.4"` | The tag to be used |
 | operator.affinity | object | `{}` |  |
 | operator.imagePullPolicy | string | `"IfNotPresent"` |  |
 | operator.imagePullSecrets | object | `{}` |  |
@@ -70,5 +71,5 @@ The following table lists the configurable parameters of the chart and the defau
 | operator.resources.requests.cpu | string | `"50m"` |  |
 | operator.resources.requests.memory | string | `"128Mi"` |  |
 | operator.tolerations | object | `{}` |  |
-| serviceMonitors.enabled | bool | `true` |  |
+| serviceMonitors.enabled | bool | `true` | Can be set to false to disable servicemonitor deployment |
 | serviceMonitors.labels | object | `{}` |  |
