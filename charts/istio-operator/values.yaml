@@ -1,5 +1,5 @@
 ---
-# Default values for istio-operator. As per:
+# Default values for istio-operator.
 
 image:
   repo: docker.io/istio
