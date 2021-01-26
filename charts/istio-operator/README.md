@@ -1,8 +1,12 @@
 # istio-operator
 
-![Version: 1.7.4](https://img.shields.io/badge/Version-1.7.4-informational?style=flat-square) ![AppVersion: 1.7.4](https://img.shields.io/badge/AppVersion-1.7.4-informational?style=flat-square)
+
+
+![Version: 1.7.4](https://img.shields.io/badge/Version-1.7.4-informational?style=flat-square) ![AppVersion: 1.7.4](https://img.shields.io/badge/AppVersion-1.7.4-informational?style=flat-square) 
 
 Helm chart for deploying Istio operator
+
+
 
 ## Installation
 
@@ -52,6 +56,7 @@ The following table lists the configurable parameters of the chart and the defau
 | controlPlane.meshConfig.enableTracing | bool | `true` |  |
 | controlPlane.meshConfig.outboundTrafficPolicy.mode | string | `"ALLOW_ANY"` |  |
 | controlPlane.meshConfig.rootNamespace | string | `"istio-system"` |  |
+| dashboards.enabled | bool | `true` |  |
 | image.repo | string | `"docker.io/istio"` |  |
 | image.tag | string | `"1.7.4"` |  |
 | operator.affinity | object | `{}` |  |
@@ -72,5 +77,3 @@ The following table lists the configurable parameters of the chart and the defau
 | operator.tolerations | object | `{}` |  |
 | serviceMonitors.enabled | bool | `true` |  |
 | serviceMonitors.labels | object | `{}` |  |
-| dashboards.enabled | bool | `true` | "Grafana Dashboard load"  |
-|
