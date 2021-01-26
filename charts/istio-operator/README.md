@@ -72,3 +72,5 @@ The following table lists the configurable parameters of the chart and the defau
 | operator.tolerations | object | `{}` |  |
 | serviceMonitors.enabled | bool | `true` |  |
 | serviceMonitors.labels | object | `{}` |  |
+| dashboards.enabled | bool | `true` | "Grafana Dashboard load"  |
+|
