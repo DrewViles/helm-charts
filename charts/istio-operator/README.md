@@ -1,6 +1,6 @@
 # istio-operator
 
-![Version: 1.7.4](https://img.shields.io/badge/Version-1.7.4-informational?style=flat-square) ![AppVersion: 1.7.4](https://img.shields.io/badge/AppVersion-1.7.4-informational?style=flat-square)
+![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![AppVersion: 1.7.4](https://img.shields.io/badge/AppVersion-1.7.4-informational?style=flat-square)
 
 Helm chart for deploying Istio operator
 
@@ -37,39 +37,25 @@ The following table lists the configurable parameters of the chart and the defau
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| controlPlane.addonComponents.grafana.enabled | bool | `false` |  |
-| controlPlane.components.egressGateways[0].enabled | bool | `true` |  |
-| controlPlane.components.egressGateways[0].name | string | `"istio-egressgateway"` |  |
-| controlPlane.components.egressGateways[0].namespace | string | `"istio-system"` |  |
-| controlPlane.components.ingressGateways[0].enabled | bool | `true` |  |
-| controlPlane.components.ingressGateways[0].name | string | `"istio-ingressgateway"` |  |
-| controlPlane.components.ingressGateways[0].namespace | string | `"istio-system"` |  |
-| controlPlane.enabled | bool | `true` |  |
-| controlPlane.meshConfig.accessLogFile | string | `"/dev/stdout"` |  |
-| controlPlane.meshConfig.defaultConfig.zipkin.address | string | `"PATH_TO_JAEGER"` |  |
-| controlPlane.meshConfig.enableAutoMtls | bool | `true` |  |
-| controlPlane.meshConfig.enablePrometheusMerge | bool | `true` |  |
-| controlPlane.meshConfig.enableTracing | bool | `true` |  |
-| controlPlane.meshConfig.outboundTrafficPolicy.mode | string | `"ALLOW_ANY"` |  |
-| controlPlane.meshConfig.rootNamespace | string | `"istio-system"` |  |
-| dashboards.enabled | bool | `true` |  |
+| controlPlane | object | `{"addonComponents":null,"components":{},"enabled":true,"meshConfig":{}}` | Control plane config - see https://istio.io/latest/docs/reference/config/istio.operator.v1alpha1/#IstioOperatorSpec |
+| controlPlane.addonComponents | string | `nil` | Addon components https://istio.io/latest/docs/reference/config/istio.operator.v1alpha1/#ExternalComponentSpec  - see values for example |
+| controlPlane.components | object | `{}` | Setup the mesh config - https://istio.io/latest/docs/reference/config/istio.operator.v1alpha1/#IstioComponentSetSpec - see values for example |
+| controlPlane.enabled | bool | `true` | Enable the control plane |
+| controlPlane.meshConfig | object | `{}` | Setup the mesh config - https://istio.io/latest/docs/reference/config/istio.mesh.v1alpha1/ - see values for example |
+| dashboards.enabled | bool | `true` | Can be set to false to disable dashboards configmaps |
 | image.repo | string | `"docker.io/istio"` | The repo to be used |
 | image.tag | string | `"1.7.4"` | The tag to be used |
-| operator.affinity | object | `{}` |  |
-| operator.imagePullPolicy | string | `"IfNotPresent"` |  |
-| operator.imagePullSecrets | object | `{}` |  |
-| operator.istioNamespace.create | bool | `true` |  |
-| operator.istioNamespace.name | string | `"istio-system"` |  |
-| operator.name | string | `"istio-operator"` |  |
-| operator.nodeSelector | object | `{}` |  |
-| operator.operatorNamespace.name | string | `"istio-operator"` |  |
-| operator.podSecurityContext | object | `{}` |  |
-| operator.prometheusNamespace.name | string | `"monitoring"` |  |
-| operator.replicas | int | `1` |  |
-| operator.resources.limits.cpu | string | `"200m"` |  |
-| operator.resources.limits.memory | string | `"256Mi"` |  |
-| operator.resources.requests.cpu | string | `"50m"` |  |
-| operator.resources.requests.memory | string | `"128Mi"` |  |
-| operator.tolerations | object | `{}` |  |
-| serviceMonitors.enabled | bool | `true` | Can be set to false to disable servicemonitor deployment |
-| serviceMonitors.labels | object | `{}` |  |
+| operator.affinity | object | `{}` | K8S Resources |
+| operator.imagePullPolicy | string | `"IfNotPresent"` | The name of the operator deployment |
+| operator.imagePullSecrets | object | `{}` | K8S Resources |
+| operator.istioNamespace.create | bool | `true` | The whether istio should be automatically deployed |
+| operator.istioNamespace.name | string | `"istio-system"` | The namespace that istio is installed to |
+| operator.name | string | `"istio-operator"` | The name of the operator deployment |
+| operator.nodeSelector | object | `{}` | K8S Resources |
+| operator.operatorNamespace.name | string | `"istio-operator"` | The namespace that the operator will be deployed in |
+| operator.podSecurityContext | object | `{}` | K8S Resources |
+| operator.prometheusNamespace.name | string | `"monitoring"` | The namespace that prometheus is in |
+| operator.replicas | int | `1` | How many replicas of the operator |
+| operator.resources | object | `{}` | K8S Resources |
+| operator.tolerations | object | `{}` | K8S Resources |
+| serviceMonitors.enabled | bool | `true` | Can be set to false to disable servicemonitor configmaps |

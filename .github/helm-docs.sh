@@ -10,4 +10,5 @@ tar -xf /tmp/helm-docs.tar.gz helm-docs
 
 # validate docs
 ./helm-docs
+echo "If this fails, you need to run `helm-docs .`. See https://github.com/norwoodj/helm-docs"
 git diff --exit-code
