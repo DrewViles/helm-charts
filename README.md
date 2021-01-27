@@ -6,7 +6,7 @@ A collection of helm charts for things that currently don't exist.
 ## How-To
 
 Create a new branch with the version you're working on.
-`git checkout -b releases/1.7.X-SemVer`
+`git checkout -b releases/0.1.x-SemVer`
 
 Change what you need to within the chart you're working on.
 
