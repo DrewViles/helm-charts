@@ -1,0 +1,33 @@
+---
+# Default values for istio-operator.
+
+image:
+  # -- The repo to be used
+  repo: metallb
+  # -- The version of metallb to use
+  tag: 0.9.4
+
+# -- Enter a name to change the default deployment name
+nameOverride: "metallb"
+
+namespace:
+  # -- The disable this if you're creating the namespace yourself
+  create: true
+  # -- The namespace to install metallb to
+  name: "metallb-system"
+
+# -- Pod ImagePullPolicy
+imagePullPolicy: Always
+# -- Pod ImagePullSecret
+imagePullSecrets: { }
+
+metallb:
+  # -- MetalLB Member List Secret - openssl rand -base64 128
+  memberlistSecret: blRRUERiMGN4dWRrbUpDN29Fc3ZkZ2ptclJ1MmRqSXVheFY3MkNVYW1GaUp1NE13Zmx2Q1hjam1wMzVBa2VkNgp2ejBtdi9GeXA4b1RLM2Y0aURhL290TUM1ZjFUU3lNY2RyeEhwakhoWGhGNFhCQWJNMnliNEdYaENmWHRPcmg5Ck11UnN4aS9GejRiWWdUcEdjNUtvSnZFd09HYzAwNEdObExKNXdvbGt5UFU9
+  # -- MetalLB Address pools.
+
+  addressPools:
+    - name: default
+      protocol: layer2
+      addresses:
+        - 192.168.0.100-192.168.0.199

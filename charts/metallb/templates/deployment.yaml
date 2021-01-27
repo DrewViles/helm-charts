@@ -1,0 +1,57 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    component: controller
+  {{- include "metallb.labels" . | nindent 4 }}
+  annotations:
+    {{- include "metallb.annotations" . | nindent 4 }}
+  name: controller
+  namespace: {{ .Values.namespace.name }}
+spec:
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      component: controller
+    {{- include "metallb.labels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        prometheus.io/port: '7472'
+        prometheus.io/scrape: 'true'
+      labels:
+        {{- include "metallb.labels" . | nindent 8 }}
+        component: controller
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - args:
+          - --port=7472
+          - --config=config
+          image: {{.Values.image.repo}}/controller:v{{.Values.image.tag}}
+          imagePullPolicy: Always
+          name: controller
+          ports:
+            - containerPort: 7472
+              name: monitoring
+          resources:
+            limits:
+              cpu: 100m
+              memory: 100Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+            readOnlyRootFilesystem: true
+      nodeSelector:
+        beta.kubernetes.io/os: linux
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+      serviceAccountName: controller
+      terminationGracePeriodSeconds: 0
