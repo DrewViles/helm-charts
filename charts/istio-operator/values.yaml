@@ -43,13 +43,13 @@ operator:
 controlPlane:
   # -- Enable the control plane
   enabled: true
-  # -- Addon components https://istio.io/latest/docs/reference/config/istio.operator.v1alpha1/#ExternalComponentSpec
+  # -- Addon components https://istio.io/latest/docs/reference/config/istio.operator.v1alpha1/#ExternalComponentSpec  - see values for example
   addonComponents:
 #    grafana:
 #      enabled: false
 
-   # -- Setup the mesh config - https://istio.io/latest/docs/reference/config/istio.mesh.v1alpha1/
-  meshConfig:
+   # -- Setup the mesh config - https://istio.io/latest/docs/reference/config/istio.mesh.v1alpha1/ - see values for example
+  meshConfig: {}
 #    accessLogFile: /dev/stdout
 #    enableAutoMtls: true
 #    outboundTrafficPolicy:
@@ -62,8 +62,8 @@ controlPlane:
 #      zipkin:
 #        address: PATH_TO_JAEGER
 
-  # -- Setup the mesh config - https://istio.io/latest/docs/reference/config/istio.operator.v1alpha1/#IstioComponentSetSpec
-  components:
+  # -- Setup the mesh config - https://istio.io/latest/docs/reference/config/istio.operator.v1alpha1/#IstioComponentSetSpec - see values for example
+  components: {}
 #    egressGateways:
 #      - name: istio-egressgateway
 #        enabled: true
