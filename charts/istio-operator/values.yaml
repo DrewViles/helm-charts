@@ -9,64 +9,80 @@ image:
   tag: 1.7.4
 #  tag: 1.5.4
 operator:
+  # -- The name of the operator deployment
   name: istio-operator
+  # -- The name of the operator deployment
   imagePullPolicy: IfNotPresent
   operatorNamespace:
+    # -- The namespace that the operator will be deployed in
     name: istio-operator
   prometheusNamespace:
+    # -- The namespace that prometheus is in
     name: monitoring
   istioNamespace:
+    # -- The namespace that istio is installed to
     name: istio-system
+    # -- The whether istio should be automatically deployed
     create: true
+  # -- How many replicas of the operator
   replicas: 1
-  resources:
-    limits:
-      cpu: 200m
-      memory: 256Mi
-    requests:
-      cpu: 50m
-      memory: 128Mi
+  # -- K8S Resources
+  resources: {}
+  # -- K8S Resources
   imagePullSecrets: {}
+  # -- K8S Resources
   podSecurityContext: {}
+  # -- K8S Resources
   nodeSelector: {}
+  # -- K8S Resources
   affinity: {}
+  # -- K8S Resources
   tolerations: {}
+
+# -- Control plane config - see https://istio.io/latest/docs/reference/config/istio.operator.v1alpha1/#IstioOperatorSpec
 controlPlane:
+  # -- Enable the control plane
   enabled: true
+  # -- Addon components https://istio.io/latest/docs/reference/config/istio.operator.v1alpha1/#ExternalComponentSpec
   addonComponents:
-    grafana:
-      enabled: false
+#    grafana:
+#      enabled: false
+
+   # -- Setup the mesh config - https://istio.io/latest/docs/reference/config/istio.mesh.v1alpha1/
   meshConfig:
-    accessLogFile: /dev/stdout
-    enableAutoMtls: true
-    outboundTrafficPolicy:
+#    accessLogFile: /dev/stdout
+#    enableAutoMtls: true
+#    outboundTrafficPolicy:
 #      mode: REGISTRY_ONLY # TODO: You can enable this once infra is in place to manage it.
-      mode: ALLOW_ANY
-    rootNamespace: istio-system
-    enablePrometheusMerge: true
-    enableTracing: true
-    defaultConfig:
-      zipkin:
-        address: PATH_TO_JAEGER
+#      mode: ALLOW_ANY
+#    rootNamespace: istio-system
+#    enablePrometheusMerge: true
+#    enableTracing: true
+#    defaultConfig:
+#      zipkin:
+#        address: PATH_TO_JAEGER
+
+  # -- Setup the mesh config - https://istio.io/latest/docs/reference/config/istio.operator.v1alpha1/#IstioComponentSetSpec
   components:
-    egressGateways:
-      - name: istio-egressgateway
-        enabled: true
-        namespace: istio-system
-    #         k8s:
-    #           serviceAnnotations:
-    #             external-dns.alpha.kubernetes.io/hostname: some.domain.com
-    ingressGateways:
-      - name: istio-ingressgateway
-        enabled: true
-        namespace: istio-system
+#    egressGateways:
+#      - name: istio-egressgateway
+#        enabled: true
+#        namespace: istio-system
+#             k8s:
+#               serviceAnnotations:
+#                 external-dns.alpha.kubernetes.io/hostname: some.domain.com
+#    ingressGateways:
+#      - name: istio-ingressgateway
+#        enabled: true
+#        namespace: istio-system
 #         k8s:
 #           serviceAnnotations:
 #             external-dns.alpha.kubernetes.io/hostname: some.domain.com
 serviceMonitors:
-  # -- Can be set to false to disable servicemonitor deployment
+  # -- Can be set to false to disable servicemonitor configmaps
   enabled: true
-  labels: {}
+#  labels: {}
 
 dashboards:
+  # -- Can be set to false to disable dashboards configmaps
   enabled: true
