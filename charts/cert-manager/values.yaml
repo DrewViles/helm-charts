@@ -1,0 +1,41 @@
+---
+# Default values for cert-manager.
+
+image:
+  # -- The repo to be used
+  repo: quay.io/jetstack
+  # -- The version of cert-manager to use
+  tag: 1.1.0
+
+# -- Enter a name to change the default deployment name
+nameOverride: "cert-manager"
+
+namespace:
+  # -- The disable this if you're creating the namespace yourself
+  create: true
+  # -- The namespace to install metallb to
+  name: "cert-manager"
+
+# -- Pod ImagePullPolicy
+imagePullPolicy: IfNotPresent
+# -- Pod ImagePullSecret
+imagePullSecrets: { }
+
+issuers:
+  acme:
+    # -- Disable to prevent creation of Staging and Production Acme ClusterIssuers
+    enable: true
+    # -- Email address used for ACME registration
+    email: drew@deetothevee.co.uk
+    solvers:
+      # -- Configure solvers for production
+      prod:
+        - http01:
+            ingress:
+              class: nginx
+      # -- Configure solvers for staging
+      staging:
+        - http01:
+            ingress:
+              class: nginx
+
