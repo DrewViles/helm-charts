@@ -14,4 +14,4 @@ keywords:
 sources:
   - https://drewviles.github.io/helm-charts/metallb
 engine: gotpl
-icon: https://istio.io/favicons/android-192x192.png
+icon: https://blog.jetstack.io/blog/cert-manager-google-cas-issuer/logo.png

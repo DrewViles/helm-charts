@@ -1,5 +1,5 @@
 ---
-# Default values for istio-operator.
+# Default values for cert-manager
 
 image:
   # -- The repo to be used
