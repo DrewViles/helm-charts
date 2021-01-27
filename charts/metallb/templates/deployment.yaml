@@ -33,7 +33,7 @@ spec:
           - --port=7472
           - --config=config
           image: {{.Values.image.repo}}/controller:v{{.Values.image.tag}}
-          imagePullPolicy: Always
+          imagePullPolicy: {{.Values.imagePullPolicy}}
           name: controller
           ports:
             - containerPort: 7472
