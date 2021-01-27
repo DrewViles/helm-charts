@@ -6,12 +6,12 @@ A collection of helm charts for things that currently don't exist.
 ## How-To
 
 Create a new branch with the version you're working on.
-`git checkout -b 1.7.X-betaX`
+`git checkout -b releases/0.1.x-SemVer`
 
 Change what you need to within the chart you're working on.
 
 Push your changes and the linting/documentation and testing action will run.
 
-All going well, raaise a push request.
+All going well, raise a push request.
 
 Once the push request has been accepted, a new release will be automatically created.
