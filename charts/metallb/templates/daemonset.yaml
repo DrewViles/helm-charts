@@ -12,7 +12,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: {{- include "metallb.name" . }}
+      app: {{ .Chart.Name }}
       component: speaker
   template:
     metadata:
@@ -20,7 +20,7 @@ spec:
         prometheus.io/port: '7472'
         prometheus.io/scrape: 'true'
       labels:
-        app: {{- include "metallb.name" . }}
+        app: {{ .Chart.Name }}
         component: speaker
     spec:
       {{- with .Values.imagePullSecrets }}

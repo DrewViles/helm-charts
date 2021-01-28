@@ -1,0 +1,89 @@
+---
+# Default values for gitlab.
+
+# -- Enter a name to change the default deployment name
+nameOverride: "gitlab"
+
+namespace:
+  # -- The disable this if you're creating the namespace yourself
+  create: true
+  # -- The namespace to install gitlab to
+  name: "gitlab"
+
+# -- Pod ImagePullPolicy
+imagePullPolicy: Always
+# -- Pod ImagePullSecret
+imagePullSecrets: { }
+
+config:
+  domain: "your_domain"
+  registryDomain: "your_registry_domain"
+  gitlab:
+    image:
+      # -- The repo to be used
+      repo: gitlab
+      # -- The version of gitlab to use
+      tag: latest
+    service:
+      type: LoadBalancer
+      annotations: {}
+#        metallb.universe.tf/address-pool: default
+#        metallb.universe.tf/allow-shared-ip: gitlab
+    ingress:
+      enabled: true
+      annotations: {}
+#        cert-manager.io/cluster-issuer: "letsencrypt-prod"
+#        nginx.ingress.kubernetes.io/proxy-body-size: "0"
+#        nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+#        nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    resources: {}
+    storage:
+      data:
+        class: fast
+        size: 50Gi
+      logs:
+        class: fast
+        size: 10Gi
+      config:
+        class: fast
+        size: 1Gi
+    gitlab_rb: |
+        some_gitlab_conf
+  redis:
+    image:
+      # -- The repo to be used
+      repo: redis
+      # -- The version of redis to use
+      tag: latest
+    resources:
+      requests:
+        cpu: 256m
+        memory: 256Mi
+      limits:
+        cpu: 350m
+        memory: 512Mi
+    storage:
+      class: fast
+      size: 15Gi
+    conf: |
+      some_redis_conf
+  postgres:
+    database:
+      db: "base64 encoded string"
+      user: "base64 encoded string"
+      passwd: "base64 encoded string"
+    image:
+      # -- The repo to be used
+      repo: postgres
+      # -- The version of postgres to use
+      tag: 12.4
+    resources:
+      requests:
+        cpu: 256m
+        memory: 256Mi
+      limits:
+        cpu: 350m
+        memory: 512Mi
+    storage:
+      class: fast
+      size: 15Gi

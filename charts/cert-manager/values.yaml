@@ -13,7 +13,7 @@ nameOverride: "cert-manager"
 namespace:
   # -- The disable this if you're creating the namespace yourself
   create: true
-  # -- The namespace to install metallb to
+  # -- The namespace to install cert-manager to
   name: "cert-manager"
 
 # -- Pod ImagePullPolicy

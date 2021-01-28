@@ -1,0 +1,115 @@
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    app: gitlab
+    tier: database
+  {{- include "gitlab.labels" . | nindent 4 }}
+  annotations:
+  {{- include "gitlab.annotations" . | nindent 4 }}
+spec:
+  selector:
+    app: gitlab
+    tier: database
+  ports:
+    - name: sql
+      port: 5432
+      targetPort: 5432
+  type: ClusterIP
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    app: gitlab
+    tier: database
+  {{- include "gitlab.labels" . | nindent 4 }}
+  annotations:
+  {{- include "gitlab.annotations" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gitlab
+      tier: database
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 2
+  template:
+    metadata:
+      labels:
+        app: gitlab
+        tier: database
+    spec:
+      serviceAccountName: gitlab
+      hostname: postgres
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: tier
+                    operator: In
+                    values:
+                      - database
+              topologyKey: "kubernetes.io/hostname"
+      containers:
+        - name: postgres
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          image: "{{.Values.config.postgres.image.repo}}:{{.Values.config.postgres.image.tag}}"
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-creds
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-creds
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-creds
+                  key: POSTGRES_DB
+            - name: PGDATA
+              value: "/var/lib/postgresql/data/pgdata"
+          resources:
+            {{- toYaml .Values.config.postgres.resources | nindent 12 }}
+          ports:
+            - name: sql
+              containerPort: 5432
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+          readinessProbe:
+            tcpSocket:
+              port: 5432
+            initialDelaySeconds: 15
+            timeoutSeconds: 15
+            periodSeconds: 30
+            failureThreshold: 20
+            successThreshold: 1
+          livenessProbe:
+            tcpSocket:
+              port: 5432
+            initialDelaySeconds: 15
+            timeoutSeconds: 15
+            periodSeconds: 15
+            failureThreshold: 5
+            successThreshold: 1
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: postgres-data

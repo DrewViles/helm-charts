@@ -1,0 +1,254 @@
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: gitlab-ssh
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    app: gitlab
+    tier: infra
+  {{- include "gitlab.labels" . | nindent 4 }}
+  annotations:
+  {{- include "gitlab.annotations" . | nindent 4 }}
+  {{- toYaml .Values.config.gitlab.service.annotations | indent 4}}
+spec:
+  externalName: {{ .Values.config.domain }}
+  selector:
+    app: gitlab
+    tier: infra
+  ports:
+    - name: ssh
+      port: 22
+      targetPort: 22
+  type: {{ .Values.config.gitlab.service.type }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: gitlab
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    app: gitlab
+    tier: infra
+  {{- include "gitlab.labels" . | nindent 4 }}
+  annotations:
+  {{- include "gitlab.annotations" . | nindent 4 }}
+spec:
+  externalName: {{ .Values.config.domain }}
+  selector:
+    app: gitlab
+    tier: infra
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+    - name: https
+      port: 443
+      targetPort: 443
+  type: ClusterIP
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: gitlab-registry
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    app: gitlab
+    tier: infra
+  {{- include "gitlab.labels" . | nindent 4 }}
+  annotations:
+  {{- include "gitlab.annotations" . | nindent 4 }}
+spec:
+  externalName: {{ .Values.config.registryDomain }}
+  selector:
+    app: gitlab
+    tier: infra
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+    - name: https
+      port: 443
+      targetPort: 443
+  type: ClusterIP
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gitlab
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    app: gitlab
+    tier: infra
+  {{- include "gitlab.labels" . | nindent 4 }}
+  annotations:
+  {{- include "gitlab.annotations" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gitlab
+      tier: infra
+  template:
+    metadata:
+      labels:
+        app: gitlab
+        tier: infra
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: "kubernetes.io/hostname"
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - gitlab
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: tier
+                    operator: In
+                    values:
+                      - infra
+              topologyKey: "kubernetes.io/hostname"
+      serviceAccountName: gitlab
+      hostname: gitlab
+      initContainers:
+        - name: gitlab-init
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          image: busybox:latest
+          volumeMounts:
+            - name: config-data
+              mountPath: /tmp/gitlab-conf
+            - name: gitlab-config
+              mountPath: /tmp/gitlab-rb/
+          command: [ "sh", "-c", "cp -L /tmp/gitlab-rb/gitlab.rb /tmp/gitlab-conf/" ]
+      containers:
+        - name: gitlab
+          image: "{{.Values.config.gitlab.image.repo}}/gitlab-ce:{{.Values.config.gitlab.image.tag}}"
+          resources:
+          {{- toYaml .Values.config.gitlab.resources | nindent 12 }}
+          securityContext:
+            privileged: true
+          ports:
+            - name: ssh
+              containerPort: 22
+            - name: http
+              containerPort: 80
+            - name: https
+              containerPort: 443
+            - name: registry
+              containerPort: 5050
+          volumeMounts:
+            - name: data-data
+              mountPath: /var/opt/gitlab
+            - name: logs-data
+              mountPath: /var/log/gitlab
+            - name: config-data
+              mountPath: /etc/gitlab
+            - name: ssl-certs
+              mountPath: /etc/gitlab/ssl/
+          readinessProbe:
+            httpGet:
+              port: 80
+              path: /-/readiness
+            initialDelaySeconds: 120
+            timeoutSeconds: 15
+            periodSeconds: 60
+            failureThreshold: 20
+            successThreshold: 1
+          livenessProbe:
+            httpGet:
+              port: 80
+              path: /-/liveness
+            initialDelaySeconds: 120
+            timeoutSeconds: 15
+            periodSeconds: 30
+            failureThreshold: 20
+            successThreshold: 1
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+      volumes:
+        - name: data-data
+          persistentVolumeClaim:
+            claimName: gitlab-data
+        - name: logs-data
+          persistentVolumeClaim:
+            claimName: gitlab-logs
+        - name: config-data
+          persistentVolumeClaim:
+            claimName: gitlab-config
+        - name: gitlab-config
+          configMap:
+            name: gitlab-config
+            items:
+              - key: gitlab_config
+                path: gitlab.rb
+        - name: ssl-certs
+          secret:
+            secretName: gitlab-cert
+            items:
+              - key: tls.crt
+                path: certificate.pem
+              - key: tls.key
+                path: certificate.key
+
+  {{- if .Values.config.gitlab.ingress.enabled -}}
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gitlab
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    app: gitlab
+    tier: infra
+  {{- include "gitlab.labels" . | nindent 4 }}
+  annotations:
+  {{- include "gitlab.annotations" . | nindent 4 }}
+  {{- toYaml .Values.config.gitlab.ingress.annotations | indent 4}}
+spec:
+  ingressClassName: "nginx"
+  rules:
+    - host: {{ .Values.config.domain }}
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: gitlab
+                port:
+                  name: http
+    - host: {{ .Values.config.registryDomain }}
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: gitlab
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - {{ .Values.config.domain }}
+        - {{ .Values.config.registryDomain }}
+      secretName: gitlab-cert
+  {{- end}}

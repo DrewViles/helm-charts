@@ -1,0 +1,97 @@
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    app: gitlab
+    tier: redis
+  {{- include "gitlab.labels" . | nindent 4 }}
+  annotations:
+  {{- include "gitlab.annotations" . | nindent 4 }}
+spec:
+  selector:
+    app: gitlab
+    tier: redis
+  ports:
+    - name: redis
+      port: 6379
+      targetPort: 6379
+  type: ClusterIP
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    app: gitlab
+    tier: redis
+  {{- include "gitlab.labels" . | nindent 4 }}
+  annotations:
+  {{- include "gitlab.annotations" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gitlab
+      tier: redis
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 2
+  template:
+    metadata:
+      labels:
+        app: gitlab
+        tier: redis
+    spec:
+      serviceAccountName: gitlab
+      hostname: redis
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: tier
+                    operator: In
+                    values:
+                      - redis
+              topologyKey: "kubernetes.io/hostname"
+      containers:
+        - name: redis
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          image: "{{.Values.config.redis.image.repo}}:{{.Values.config.redis.image.tag}}"
+          resources:
+            {{- toYaml .Values.config.redis.resources | nindent 12 }}
+          ports:
+            - name: redis
+              containerPort: 6379
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          readinessProbe:
+            tcpSocket:
+              port: 6379
+            initialDelaySeconds: 15
+            timeoutSeconds: 15
+            periodSeconds: 30
+            failureThreshold: 20
+            successThreshold: 1
+          livenessProbe:
+            tcpSocket:
+              port: 6379
+            initialDelaySeconds: 15
+            timeoutSeconds: 15
+            periodSeconds: 15
+            failureThreshold: 5
+            successThreshold: 1
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: redis-data

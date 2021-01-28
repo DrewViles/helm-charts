@@ -1,0 +1,99 @@
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: gitlab-data
+  namespace: {{.Values.namespace.name}}
+  labels:
+    app: gitlab
+  {{- include "gitlab.labels" . | nindent 4 }}
+  annotations:
+  {{- include "gitlab.annotations" . | nindent 4 }}
+spec:
+  storageClassName: {{ .Values.config.postgres.storage.class }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.config.gitlab.storage.data.size }}
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: gitlab-logs
+  namespace: {{.Values.namespace.name}}
+  labels:
+    app: gitlab
+  {{- include "gitlab.labels" . | nindent 4 }}
+  annotations:
+  {{- include "gitlab.annotations" . | nindent 4 }}
+spec:
+  storageClassName: {{ .Values.config.postgres.storage.class }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.config.gitlab.storage.logs.size }}
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: gitlab-config
+  namespace: {{.Values.namespace.name}}
+  labels:
+    app: gitlab
+  {{- include "gitlab.labels" . | nindent 4 }}
+  annotations:
+  {{- include "gitlab.annotations" . | nindent 4 }}
+spec:
+  storageClassName: {{ .Values.config.postgres.storage.class }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.config.gitlab.storage.config.size }}
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-data
+  namespace: {{.Values.namespace.name}}
+  labels:
+    app: gitlab
+  {{- include "gitlab.labels" . | nindent 4 }}
+  annotations:
+  {{- include "gitlab.annotations" . | nindent 4 }}
+spec:
+  storageClassName: {{ .Values.config.postgres.storage.class }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.config.redis.storage.size }}
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-data
+  namespace: {{.Values.namespace.name}}
+  labels:
+    app: gitlab
+  {{- include "gitlab.labels" . | nindent 4 }}
+  annotations:
+  {{- include "gitlab.annotations" . | nindent 4 }}
+spec:
+  storageClassName: {{ .Values.config.postgres.storage.class }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.config.postgres.storage.config }}

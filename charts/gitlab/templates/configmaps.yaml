@@ -1,0 +1,32 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gitlab-config
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    app: gitlab
+    tier: infra
+  {{- include "gitlab.labels" . | nindent 4 }}
+  annotations:
+  {{- include "gitlab.annotations" . | nindent 4 }}
+data:
+  gitlab_config: {{ .Values.config.gitlab.gitlab_rb }}
+
+
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-config
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    app: gitlab
+    tier: redis
+  {{- include "gitlab.labels" . | nindent 4 }}
+  annotations:
+  {{- include "gitlab.annotations" . | nindent 4 }}
+data:
+  redis.conf: {{ .Values.config.redis.conf }}
